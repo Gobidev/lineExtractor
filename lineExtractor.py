@@ -4,8 +4,14 @@ import threading
 
 
 def get_lines_of_file(first_line, last_line, filename):
-    target_file_lines = open(filename, "r").readlines()
-    return target_file_lines[first_line-1:last_line]
+    target_file = open(filename, "r")
+    out_lines = []
+    for i, line in enumerate(target_file):
+        if first_line <= i+1 <= last_line:
+            out_lines.append(line)
+        if i > last_line:
+            break
+    return out_lines
 
 
 def join_lines(lines):
