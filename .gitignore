@@ -3,3 +3,4 @@
 *.iml
 .path_in
 .path_out
+*.pyc
