@@ -23,7 +23,7 @@ in your terminal or clicking [here](https://github.com/Gobidev/lineExtractor/arc
 
 ## How to use lineExtractor?
 
-![alt text](https://github.com/Gobidev/lineExtractor/blob/master/screenshots/main_window.png?raw=true)
+![alt text](https://raw.githubusercontent.com/Gobidev/lineExtractor/master/screenshots/main_window.png)
 
 1. Open a file you want to get lines from.
 2. Specify which lines you want.
