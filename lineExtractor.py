@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+import threading
 
 
 def get_lines_of_file(first_line, last_line, filename):
@@ -74,7 +75,7 @@ def open_out_button_press():
     refresh_out_path_lbl()
 
 
-def run_button_press():
+def run():
     set_status("Checking Inputs..")
     first_line = first_line_entry.get()
     last_line = last_line_entry.get()
@@ -93,6 +94,10 @@ def run_button_press():
     set_status("Writing to Output File..")
     write_lines_to_file(read_path_file("out"), final_string)
     set_status("Done!")
+
+
+def run_button_press():
+    threading.Thread(target=run).start()
 
 
 if __name__ == '__main__':
