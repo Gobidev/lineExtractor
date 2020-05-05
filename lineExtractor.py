@@ -22,12 +22,14 @@ def write_lines_to_file(filename, lines_str):
 
 
 def request_open_file_path():
-    file_path = filedialog.askopenfilename(initialdir="/", title="Select Input File")
+    prev_path = read_path_file("in")
+    file_path = filedialog.askopenfilename(initialdir=prev_path, title="Select Input File")
     return file_path
 
 
 def request_save_file_path():
-    file_path = filedialog.asksaveasfilename(initialdir="/", title="Select Output File")
+    prev_path = read_path_file("out")
+    file_path = filedialog.asksaveasfilename(initialdir=prev_path, title="Select Output File")
     return file_path
 
 
@@ -66,12 +68,16 @@ def set_status(status):
 
 
 def open_in_button_press():
-    save_path_to_file(request_open_file_path(), "in")
+    path = request_open_file_path()
+    if path != "":
+        save_path_to_file(path, "in")
     refresh_in_path_lbl()
 
 
 def open_out_button_press():
-    save_path_to_file(request_save_file_path(), "out")
+    path = request_save_file_path()
+    if path != "":
+        save_path_to_file(path, "out")
     refresh_out_path_lbl()
 
 
@@ -84,7 +90,6 @@ def run():
         last_line = int(last_line)
     except ValueError:
         set_status("Invalid Input")
-        print("Invalid Input")
         return False
 
     set_status("Reading Input File..")
@@ -119,7 +124,7 @@ if __name__ == '__main__':
     try:
         refresh_in_path_lbl()
     except FileNotFoundError:
-        save_path_to_file("", "in")
+        save_path_to_file("/", "in")
 
     # Row 1
     line_range_label = tk.Label(root, text="Line Range:")
@@ -147,7 +152,7 @@ if __name__ == '__main__':
     try:
         refresh_out_path_lbl()
     except FileNotFoundError:
-        save_path_to_file("", "out")
+        save_path_to_file("/", "out")
 
     # Row 3
     run_button = tk.Button(root, text="Run", command=run_button_press)
