@@ -73,6 +73,13 @@ def set_status(status):
     status_lbl.config(text=status)
 
 
+def get_number_of_lines(path):
+    with open(path) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
+
+
 def open_in_button_press():
     path = request_open_file_path()
     if path != "":
@@ -95,11 +102,15 @@ def run():
         first_line = int(first_line)
         last_line = int(last_line)
     except ValueError:
-        set_status("Invalid Input")
+        set_status("Invalid Line Range")
         return False
 
     set_status("Reading Input File..")
-    lines = get_lines_of_file(first_line, last_line, read_path_file("in"))
+    try:
+        lines = get_lines_of_file(first_line, last_line, read_path_file("in"))
+    except:
+        set_status("Invalid Input File")
+        return False
     set_status("Joining Lines..")
     final_string = join_lines(lines)
     set_status("Writing to Output File..")
@@ -109,6 +120,14 @@ def run():
 
 def run_button_press():
     threading.Thread(target=run).start()
+
+
+def calculate_number_of_lines_button_press():
+    global line_amount_label
+    try:
+        number_of_lines.config(text=str(get_number_of_lines(read_path_file("in"))) + " Lines")
+    except:
+        set_status("Invalid Input File")
 
 
 if __name__ == '__main__':
@@ -133,41 +152,51 @@ if __name__ == '__main__':
         save_path_to_file("/", "in")
 
     # Row 1
-    line_range_label = tk.Label(root, text="Line Range:")
-    line_range_label.grid(row=1, column=0, padx=3, pady=3, sticky="w")
+    line_amount_label = tk.Label(root, text="Number of Lines:")
+    line_amount_label.grid(row=1, column=0, padx=3, pady=3, sticky="w")
 
-    first_line_entry = tk.Entry(root)
-    first_line_entry.grid(row=1, column=1, padx=3, pady=3, sticky="w")
+    calculate_number_of_lines_button = tk.Button(root, text="Calculate", command=calculate_number_of_lines_button_press)
+    calculate_number_of_lines_button.grid(row=1, column=1, padx=3, pady=3, sticky="w")
 
-    hyphen_lbl = tk.Label(root, text="-")
-    hyphen_lbl.grid(row=1, column=2, padx=3, pady=3)
-
-    last_line_entry = tk.Entry(root)
-    last_line_entry.grid(row=1, column=3, padx=3, pady=3, sticky="w")
+    number_of_lines = tk.Label(root, text="")
+    number_of_lines.grid(row=1, column=3, padx=3, pady=3, sticky="w")
 
     # Row 2
-    open_out_file_lbl = tk.Label(root, text="Output File:")
-    open_out_file_lbl.grid(row=2, column=0, padx=3, pady=3, sticky="w")
+    line_range_label = tk.Label(root, text="Line Range:")
+    line_range_label.grid(row=2, column=0, padx=3, pady=3, sticky="w")
 
-    open_out_file_button = tk.Button(root, text="Open", command=open_out_button_press)
-    open_out_file_button.grid(row=2, column=1, padx=3, pady=3, sticky="w")
+    first_line_entry = tk.Entry(root)
+    first_line_entry.grid(row=2, column=1, padx=3, pady=3, sticky="w")
+
+    hyphen_lbl = tk.Label(root, text="-")
+    hyphen_lbl.grid(row=2, column=2, padx=3, pady=3)
+
+    last_line_entry = tk.Entry(root)
+    last_line_entry.grid(row=2, column=3, padx=3, pady=3, sticky="w")
+
+    # Row 3
+    open_out_file_lbl = tk.Label(root, text="Output File:")
+    open_out_file_lbl.grid(row=3, column=0, padx=3, pady=3, sticky="w")
+
+    open_out_file_button = tk.Button(root, text="Set Path", command=open_out_button_press)
+    open_out_file_button.grid(row=3, column=1, padx=3, pady=3, sticky="w")
 
     selected_out_path_lbl = tk.Label(root, text="")
-    selected_out_path_lbl.grid(row=2, column=3, padx=3, pady=3, sticky="e")
+    selected_out_path_lbl.grid(row=3, column=3, padx=3, pady=3, sticky="e")
 
     try:
         refresh_out_path_lbl()
     except FileNotFoundError:
         save_path_to_file("/", "out")
 
-    # Row 3
+    # Row 4
     run_button = tk.Button(root, text="Run", command=run_button_press)
-    run_button.grid(row=3, column=0, padx=3, pady=3, sticky="w")
+    run_button.grid(row=4, column=0, padx=3, pady=3, sticky="w")
 
     status_text_lbl = tk.Label(root, text="Status:")
-    status_text_lbl.grid(row=3, column=2, padx=3, pady=3, sticky="w")
+    status_text_lbl.grid(row=4, column=2, padx=3, pady=3, sticky="w")
 
     status_lbl = tk.Label(root, text="")
-    status_lbl.grid(row=3, column=3, padx=3, pady=3, sticky="w")
+    status_lbl.grid(row=4, column=3, padx=3, pady=3, sticky="w")
 
     root.mainloop()
